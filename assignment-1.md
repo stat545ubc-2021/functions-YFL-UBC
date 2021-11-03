@@ -1,5 +1,6 @@
     library(tidyverse)
     library(datateachr)
+    library(testthat)
 
 # Function
 
@@ -8,7 +9,37 @@ categorical variable. It has the added feature of ensuring a readable
 plot will be obtained by filtering for 10 categories by median in either
 ascending or descending order.
 
+    #' boxplots for a dataframe
+    #'
+    #' This is a function to generate boxplots of a numerical variable across
+    #' a categorical variable, subsetting the data for 10 levels by either ascending
+    #' or descending order of the median. This ensures a visually interpretable
+    #' plot, where the categorical variable is plotted in the specified order.
+    #'
+    #' @param df dataframe to be plotted.
+    #'
+    #' @param categorical variable to be plotted on the x-axis.
+    #'
+    #' @param numerical variable to be plotted on the y-axis.
+    #'
+    #' @param min_sample_size a numerical scalar. Minimum group size to include
+    #' for plotting. Low sample size may produce highly skewed boxplots.
+    #'
+    #' @param na.rm a logical scalar. Whether NA's should be excluded in the
+    #' calculation of medians.
+    #'
+    #' @param .desc specifies whether groupings are selected based on ascending
+    #' or descending medians. Follows the notation of the forcats package.
+    #'
+    #' @return output will be a plot provided a dataset and the corresponding
+    #' categorical and numerical vaiables are specified. Otherwise, will return a
+    #' warning.
     boxplot_10 <- function(df, categorical, numerical, min_sample_size = 10, na.rm = TRUE, .desc = FALSE) {
+      #check that a dataframe hsa been inputted
+      if (is.vector(df)) {
+        stop("df must be a dataframe. You inputted an object of the type: ", class(df))
+      }
+        
       # calculate medians and filter by minimum sample size
       top_10 <- df %>%
         group_by({{ categorical }}) %>%
@@ -30,10 +61,10 @@ ascending or descending order.
 
       # filter for variables to be plotted and set levels
       df_10 <- df %>%
-        filter({{ categorical }} %in% top_10) %>%
+        filter({{ categorical }} %in% top_10 & !is.na({{ numerical }})) %>%
         mutate(categorical = fct_reorder({{ categorical }}, {{ numerical }}, na.rm = na.rm, .desc = .desc))
-      # ggplot automatically removes NA when plotting
-
+      # ggplot automatically removes NA but will return a warning
+      
       # ggplot visualization
       ggplot(df_10, aes(
         x = categorical,
@@ -44,7 +75,8 @@ ascending or descending order.
         theme(
           axis.text.x = element_text(size = 6, angle = 45, vjust = 1, hjust = 1),
           legend.position = "none"
-        ) + xlab(element_blank())
+        ) +
+        xlab(element_blank())
     }
 
 # Examples
@@ -88,16 +120,12 @@ survival for different cancer types. We choose a minimum sample size of
 
     boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = T, .desc = T)
 
-    ## Warning: Removed 399 rows containing non-finite values (stat_boxplot).
-
 ![](assignment-1_files/figure-markdown_strict/e1-1.png) **Example 2.** A
 dataset on vancouver trees from the datateachr package is used to create
 a plot of the tree genera with the greatest median altitude, as a
 indicator of which trees tend to be located more north.
 
     boxplot_10(vancouver_trees, genus_name, latitude, .desc = T, min_sample_size =  100)
-
-    ## Warning: Removed 1994 rows containing non-finite values (stat_boxplot).
 
 ![](assignment-1_files/figure-markdown_strict/e2-1.png)
 
@@ -106,6 +134,28 @@ steam games, to visualize the discount for games of different genres.
 
     boxplot_10(steam_games, genre, discount_price, min_sample_size =  20, .desc = T)
 
-    ## Warning: Removed 488 rows containing non-finite values (stat_boxplot).
+![](assignment-1_files/figure-markdown_strict/e3-1.png) \# Testing the
+function
 
-![](assignment-1_files/figure-markdown_strict/e3-1.png)
+    # check the output type of our function
+    test_that("Function outputs a boxplot", {
+      p <- boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = T, .desc = T) 
+      # class of the output should be a ggplot object
+      expect_s3_class(p ,"ggplot") 
+      # check that geom layer is a boxplot
+      expect_identical(class(p$layers[[1]]$geom)[1], "GeomBoxplot")
+    })
+
+    ## Test passed 😸
+
+    # create a test inputting arguments that cannot be plotted
+    test_that("Function requires correct argument input types", {
+      # numeric scalar as only argument
+      expect_error(boxplot_10(1))
+       # logical scalar as only argument
+      expect_error(boxplot_10(T))
+      # list as only argument
+      expect_error(boxplot_10(list(c(1,2,3), c("A","B","C"))))
+    })
+
+    ## Test passed 🌈
