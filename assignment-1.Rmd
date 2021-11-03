@@ -1,0 +1,76 @@
+---
+title: "Assignment B-1"
+output: md_document
+---
+
+```{r setup, message = FALSE}
+library(tidyverse)
+library(datateachr)
+```
+
+# Function
+We create a function that is able to plot a numerical variable across a categorical variable. It has the added feature of ensuring a readable plot will be obtained by filtering for 10 categories by median in either ascending or descending order. 
+
+```{r f1}
+boxplot_10 <- function(df, categorical, numerical, min_sample_size = 10, na.rm = TRUE, .desc = FALSE) {
+  # calculate medians and filter by minimum sample size
+  top_10 <- df %>%
+    group_by({{ categorical }}) %>%
+    summarize(median = median({{ numerical }}, na.rm = na.rm), count = n()) %>%
+    filter(count > min_sample_size)
+
+  # order categorical in ascending or descending order
+  if (.desc == T) {
+    top_10 <- top_10 %>%
+      arrange(desc(median)) %>%
+      head(10) %>%
+      pull({{ categorical }})
+  } else {
+    top_10 <- top_10 %>%
+      arrange(median) %>%
+      head(10) %>%
+      pull({{ categorical }})
+  }
+
+  # filter for variables to be plotted and set levels
+  df_10 <- df %>%
+    filter({{ categorical }} %in% top_10) %>%
+    mutate(categorical = fct_reorder({{ categorical }}, {{ numerical }}, na.rm = na.rm, .desc = .desc))
+  # ggplot automatically removes NA when plotting
+
+  # ggplot visualization
+  ggplot(df_10, aes(
+    x = categorical,
+    y = {{ numerical }},
+    color = categorical
+  )) +
+    geom_boxplot(outlier.color = "black", outlier.size = 0.5) +
+    theme(
+      axis.text.x = element_text(size = 6, angle = 45, vjust = 1, hjust = 1),
+      legend.position = "none"
+    ) + xlab(element_blank())
+}
+```
+
+# Examples
+
+**Example 1.** A clinical cancer dataset is used to plot overall survival for different cancer types. We choose a minimum sample size of 5, and order the types in descending order of median overall survival.
+```{r e1}
+#load and preview the dataset
+msk <- read_tsv("https://raw.githubusercontent.com/stat545ubc-2021/mini-data-analysis-EL/main/data/msk_impact_2017_clinical_data.tsv")
+
+head(msk)
+
+boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = T, .desc = T)
+```
+**Example 2.** A dataset on vancouver trees from the datateachr package is used to create a plot of the tree genera with the greatest median altitude, as a indicator of which trees tend to be located more north.
+
+```{r e2}
+boxplot_10(vancouver_trees, genus_name, latitude, .desc = T, min_sample_size =  100)
+```
+
+**Example 3.** We use another dataset from datateachr, this time for steam games, to visualize the discount for games of different genres.
+
+```{r e3}
+boxplot_10(steam_games, genre, discount_price, min_sample_size =  20, .desc = T)
+```
