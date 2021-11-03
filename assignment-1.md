@@ -16,24 +16,26 @@ ascending or descending order.
     #' or descending order of the median. This ensures a visually interpretable
     #' plot, where the categorical variable is plotted in the specified order.
     #'
-    #' @param df dataframe to be plotted.
+    #' @param df The dataframe (df) to be plotted.
     #'
-    #' @param categorical variable to be plotted on the x-axis.
+    #' @param categorical The variable to be plotted on the x-axis. Must have
+    #' categories that can be subsetted by.
     #'
-    #' @param numerical variable to be plotted on the y-axis.
+    #' @param numerical The variable to be plotted on the y-axis. It should 
+    #' not require any scaling prior to plotting.
     #'
-    #' @param min_sample_size a numerical scalar. Minimum group size to include
+    #' @param min_sample_size A numerical scalar. Minimum group size to include
     #' for plotting. Low sample size may produce highly skewed boxplots.
     #'
-    #' @param na.rm a logical scalar. Whether NA's should be excluded in the
+    #' @param na.rm A logical scalar. Whether NA's should be excluded in the
     #' calculation of medians.
     #'
-    #' @param .desc specifies whether groupings are selected based on ascending
+    #' @param .desc To specify whether groupings are selected based on ascending
     #' or descending medians. Follows the notation of the forcats package.
     #'
-    #' @return output will be a plot provided a dataset and the corresponding
+    #' @return Output will be a plot provided a dataset and the corresponding
     #' categorical and numerical vaiables are specified. Otherwise, will return a
-    #' warning.
+    #' error.
     boxplot_10 <- function(df, categorical, numerical, min_sample_size = 10, na.rm = TRUE, .desc = FALSE) {
       #check that a dataframe hsa been inputted
       if (is.vector(df)) {
@@ -122,15 +124,17 @@ survival for different cancer types. We choose a minimum sample size of
 
 ![](assignment-1_files/figure-markdown_strict/e1-1.png) **Example 2.** A
 dataset on vancouver trees from the datateachr package is used to create
-a plot of the tree genera with the greatest median altitude, as a
-indicator of which trees tend to be located more north.
+a plot of the tree genera with the greatest median latitude, as a
+indicator of which trees tend to be located more north with a minimum
+sample size of 100.
 
     boxplot_10(vancouver_trees, genus_name, latitude, .desc = T, min_sample_size =  100)
 
 ![](assignment-1_files/figure-markdown_strict/e2-1.png)
 
 **Example 3.** We use another dataset from datateachr, this time for
-steam games, to visualize the discount for games of different genres.
+steam games, to visualize the discount price for games of different
+genres.
 
     boxplot_10(steam_games, genre, discount_price, min_sample_size =  20, .desc = T)
 
@@ -146,7 +150,7 @@ function
       expect_identical(class(p$layers[[1]]$geom)[1], "GeomBoxplot")
     })
 
-    ## Test passed 😸
+    ## Test passed 🌈
 
     # create a test inputting arguments that cannot be plotted
     test_that("Function requires correct argument input types", {
@@ -158,4 +162,4 @@ function
       expect_error(boxplot_10(list(c(1,2,3), c("A","B","C"))))
     })
 
-    ## Test passed 🌈
+    ## Test passed 🥳
