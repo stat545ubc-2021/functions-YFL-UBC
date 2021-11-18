@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# boxquickplot
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of boxquickplot is to provide users with a function to generate a boxplot figure in a single line. The figure has the added features of being organized in either ascending or descending order of the median of the plotted numerical variable for the 10 categories that are included. 
+
+## Installation
+
+You can install the development version of boxquickplot from [GitHub](https://github.com/) with:
+
+only  using `devtools::install_github("Organization/repository")`
+
+```{r}
+# install.packages("devtools")
+devtools::install_github("stat545ubc-2021/functions-YFL-UBC/boxquickplot/")
+```
+
+## Example
+
+This is a basic example which shows you how to rapidly plot a cancer dataset to show the 10 deadliest cancer types, by overall survival.
+
+```{r example}
+library(boxquickplot)
+## basic example code
+
+```
