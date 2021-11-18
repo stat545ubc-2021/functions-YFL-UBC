@@ -104,7 +104,11 @@ boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5,
 boxplot_10(vancouver_trees, genus_name, latitude, .desc = T, min_sample_size =  100)
 ```
 
+<<<<<<< HEAD
 **Example 3.** We use another dataset from datateachr, this time for steam games, to visualize the discount price for games of different genres.
+=======
+**Example 3.** We use another dataset from datateachr, this time for steam games, to visualize the discount price for games of different genres. 
+>>>>>>> ee60eaf3b8ed44c645ae21f92a940d52cdd8232c
 
 ```{r e3}
 boxplot_10(steam_games, genre, discount_price, min_sample_size =  20, .desc = T)
