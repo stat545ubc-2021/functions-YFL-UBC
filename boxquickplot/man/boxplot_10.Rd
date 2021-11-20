@@ -8,19 +8,23 @@ boxplot_10(
   df,
   categorical,
   numerical,
+  plot = 10,
   min_sample_size = 10,
   na.rm = TRUE,
   .desc = FALSE
 )
 }
 \arguments{
-\item{df}{The dataframe (df) to be plotted.}
+\item{df}{The dataframe to be plotted.}
 
 \item{categorical}{The variable to be plotted on the x-axis. Must have
 categories that can be subsetted by.}
 
 \item{numerical}{The variable to be plotted on the y-axis. It should
 not require any scaling prior to plotting.}
+
+\item{plot}{A numerical scalar. Number of levels of the categorical to be
+plotted.}
 
 \item{min_sample_size}{A numerical scalar. Minimum group size to include
 for plotting. Low sample size may produce highly skewed boxplots.}
@@ -29,20 +33,21 @@ for plotting. Low sample size may produce highly skewed boxplots.}
 calculation of medians.}
 
 \item{.desc}{To specify whether groupings are selected based on ascending
-or descending medians. Follows the notation of the forcats package.
-#' @return Output will be a plot provided a dataset and the corresponding
-categorical and numerical vaiables are specified. Otherwise, will return a
-error.}
+or descending medians. Follows the notation of the forcats package.}
+}
+\value{
+Output will be a boxplot of the class 'ggplot' from the \code{ggplot2} package.
 }
 \description{
 This is a function to generate boxplots of a numerical variable across
-a categorical variable, subsetting the data for 10 levels by either ascending
-or descending order of the median. This ensures a visually interpretable
-plot, where the categorical variable is plotted in the specified order.
+a categorical variable, subsetting the data for the desired number of levels
+by either ascending or descending order of the median. This ensures a
+visually interpretableplot, where the categorical variable is plotted in the
+specified order.
 }
 \examples{
-msk <- read_tsv("https://raw.githubusercontent.com/stat545ubc-2021/mini-data-analysis-EL/main/data/msk_impact_2017_clinical_data.tsv")
-boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = T, .desc = T)
+msk <- readr::read_tsv("https://raw.githubusercontent.com/stat545ubc-2021/mini-data-analysis-EL/main/data/msk_impact_2017_clinical_data.tsv")
+boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = TRUE, .desc = TRUE)
 
-boxplot_10(datateachr::vancouver_trees, genus_name, latitude, min_sample_size = 100, .desc = T,)
+boxplot_10(datateachr::vancouver_trees, genus_name, latitude, min_sample_size = 100, .desc = TRUE)
 }

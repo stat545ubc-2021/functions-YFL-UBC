@@ -24,6 +24,9 @@ ascending or descending order.
     #' @param numerical The variable to be plotted on the y-axis. It should 
     #' not require any scaling prior to plotting.
     #'
+    #' @param plot A numerical scalar. Number of levels of the categorical to be
+    #' plotted.
+    #'
     #' @param min_sample_size A numerical scalar. Minimum group size to include
     #' for plotting. Low sample size may produce highly skewed boxplots.
     #'
@@ -36,39 +39,39 @@ ascending or descending order.
     #' @return Output will be a plot provided a dataset and the corresponding
     #' categorical and numerical vaiables are specified. Otherwise, will return a
     #' error.
-    boxplot_10 <- function(df, categorical, numerical, min_sample_size = 10, na.rm = TRUE, .desc = FALSE) {
+    boxplot_10 <- function(df, categorical, numerical, plot = 10, min_sample_size = 10, na.rm = TRUE, .desc = FALSE) {
       #check that a dataframe hsa been inputted
       if (is.vector(df)) {
         stop("df must be a dataframe. You inputted an object of the type: ", class(df))
       }
         
       # calculate medians and filter by minimum sample size
-      top_10 <- df %>%
+      top <- df %>%
         group_by({{ categorical }}) %>%
         summarize(median = median({{ numerical }}, na.rm = na.rm), count = n()) %>%
         filter(count > min_sample_size)
 
       # order categorical in ascending or descending order
       if (.desc == T) {
-        top_10 <- top_10 %>%
+        top <- top %>%
           arrange(desc(median)) %>%
-          head(10) %>%
+          head({{plot}}) %>%
           pull({{ categorical }})
       } else {
-        top_10 <- top_10 %>%
+        top <- top %>%
           arrange(median) %>%
-          head(10) %>%
+          head({{plot}}) %>%
           pull({{ categorical }})
       }
 
       # filter for variables to be plotted and set levels
-      df_10 <- df %>%
-        filter({{ categorical }} %in% top_10 & !is.na({{ numerical }})) %>%
+      df_top <- df %>%
+        filter({{ categorical }} %in% top & !is.na({{ numerical }})) %>%
         mutate(categorical = fct_reorder({{ categorical }}, {{ numerical }}, na.rm = na.rm, .desc = .desc))
       # ggplot automatically removes NA but will return a warning
       
       # ggplot visualization
-      ggplot(df_10, aes(
+      ggplot(df_top, aes(
         x = categorical,
         y = {{ numerical }},
         color = categorical
@@ -120,7 +123,7 @@ survival for different cancer types. We choose a minimum sample size of
     ## #   Number of Samples Per Patient <dbl>, Sample coverage <dbl>,
     ## #   Sample Type <chr>, Sex <chr>, Smoking History <chr>, …
 
-    boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, min_sample_size = 5, na.rm = T, .desc = T)
+    boxplot_10(msk, `Cancer Type`, `Overall Survival (Months)`, plot = 5, min_sample_size = 5, na.rm = T, .desc = T)
 
 ![](assignment-1_files/figure-markdown_strict/e1-1.png) **Example 2.** A
 dataset on vancouver trees from the datateachr package is used to create
@@ -132,9 +135,12 @@ sample size of 100.
 
 ![](assignment-1_files/figure-markdown_strict/e2-1.png)
 
-**Example 3.** We use another dataset from datateachr, this time for
-steam games, to visualize the discount price for games of different
-genres.
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD **Example 3.** We use another dataset
+from datateachr, this time for steam games, to visualize the discount
+price for games of different genres. ======= **Example 3.** We use
+another dataset from datateachr, this time for steam games, to visualize
+the discount price for games of different genres.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; ee60eaf3b8ed44c645ae21f92a940d52cdd8232c
 
     boxplot_10(steam_games, genre, discount_price, min_sample_size =  20, .desc = T)
 
@@ -150,7 +156,7 @@ function
       expect_identical(class(p$layers[[1]]$geom)[1], "GeomBoxplot")
     })
 
-    ## Test passed 🌈
+    ## Test passed 😀
 
     # create a test inputting arguments that cannot be plotted
     test_that("Function requires correct argument input types", {
@@ -162,4 +168,4 @@ function
       expect_error(boxplot_10(list(c(1,2,3), c("A","B","C"))))
     })
 
-    ## Test passed 🥳
+    ## Test passed 🌈
