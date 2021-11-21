@@ -20,8 +20,17 @@ You can install the development version of boxquickplot from
 ``` r
 # install.packages("devtools")
 devtools::install_github("stat545ubc-2021/functions-YFL-UBC/boxquickplot/")
-#> Skipping install of 'boxquickplot' from a github remote, the SHA1 (820a1a0b) has not changed since last install.
-#>   Use `force = TRUE` to force installation
+#> Downloading GitHub repo stat545ubc-2021/functions-YFL-UBC@HEAD
+#> 
+#>      checking for file ‘/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/Rtmpz0ASYp/remotes1180651a55a/stat545ubc-2021-functions-YFL-UBC-61c86be/boxquickplot/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/Rtmpz0ASYp/remotes1180651a55a/stat545ubc-2021-functions-YFL-UBC-61c86be/boxquickplot/DESCRIPTION’ (352ms)
+#>   ─  preparing ‘boxquickplot’:
+#>      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
+#>   ─  checking for LF line-endings in source and make files and shell scripts
+#>   ─  checking for empty or unneeded directories
+#>    Omitted ‘LazyData’ from DESCRIPTION
+#>   ─  building ‘boxquickplot_1.0.0.tar.gz’
+#>      
+#> 
 ```
 
 ## Example
