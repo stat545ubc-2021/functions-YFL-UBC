@@ -31,7 +31,7 @@ boxplot_10 <- function(df, categorical, numerical, plot = 10, min_sample_size = 
   #define variables locally in the function, as otherwise check() will have a note for undefined global variables
   Median <- NULL
   Count <- NULL
-  #check that a dataframe hsa been inputted
+  #check that a dataframe was inputted
   if (is.vector(df)) {
     stop("df must be a dataframe. You inputted an object of the type: ", class(df))
   }
@@ -42,7 +42,7 @@ boxplot_10 <- function(df, categorical, numerical, plot = 10, min_sample_size = 
     dplyr::summarize(Median = stats::median({{ numerical }}, na.rm = na.rm), Count = dplyr::n()) %>%
     dplyr::filter(Count > min_sample_size)
 
-  # order categorical in ascending or descending order
+  # order categorical in ascending or descending order, and set number of groups to be plotted
   if (.desc == T) {
     top <- top %>%
       dplyr::arrange(dplyr::desc(Median)) %>%
@@ -55,7 +55,7 @@ boxplot_10 <- function(df, categorical, numerical, plot = 10, min_sample_size = 
       dplyr::pull({{ categorical }})
   }
 
-  # filter for variables to be plotted and set levels
+  # filter for groups to be plotted
   df_top <- df %>%
     dplyr::filter({{ categorical }} %in% top & !is.na({{ numerical }})) %>%
     dplyr::mutate(categorical = forcats::fct_reorder({{ categorical }}, {{ numerical }}, na.rm = na.rm, .desc = .desc))
@@ -65,7 +65,7 @@ boxplot_10 <- function(df, categorical, numerical, plot = 10, min_sample_size = 
   ggplot2::ggplot(df_top, ggplot2::aes(
     x = categorical,
     y = {{ numerical }},
-    color = categorical
+    fill = categorical
   )) +
     ggplot2::geom_boxplot(outlier.color = "black", outlier.size = 0.5) +
     ggplot2::theme(
