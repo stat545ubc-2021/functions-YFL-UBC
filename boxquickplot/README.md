@@ -20,27 +20,8 @@ You can install the development version of boxquickplot from
 ``` r
 # install.packages("devtools")
 devtools::install_github("stat545ubc-2021/functions-YFL-UBC/boxquickplot/")
-#> Downloading GitHub repo stat545ubc-2021/functions-YFL-UBC@HEAD
-#> glue   (1.4.2 -> 1.5.0) [CRAN]
-#> tibble (3.1.5 -> 3.1.6) [CRAN]
-#> vroom  (1.5.5 -> 1.5.6) [CRAN]
-#> readr  (2.0.2 -> 2.1.0) [CRAN]
-#> Installing 4 packages: glue, tibble, vroom, readr
-#> Installing packages into '/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/RtmpDv5Yly/temp_libpath902c10dbf1a1'
-#> (as 'lib' is unspecified)
-#> 
-#> The downloaded binary packages are in
-#>  /var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T//RtmpyOQ1Ih/downloaded_packages
-#>      checking for file ‘/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/RtmpyOQ1Ih/remotes10e9e620a17b6/stat545ubc-2021-functions-YFL-UBC-a788633/boxquickplot/DESCRIPTION’ ...  ✓  checking for file ‘/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/RtmpyOQ1Ih/remotes10e9e620a17b6/stat545ubc-2021-functions-YFL-UBC-a788633/boxquickplot/DESCRIPTION’ (380ms)
-#>   ─  preparing ‘boxquickplot’:
-#>      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
-#>   ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>   ─  building ‘boxquickplot_1.0.0.tar.gz’
-#>      
-#> 
-#> Installing package into '/private/var/folders/hc/slhgtcd10v73zw8503mls20c0000gn/T/RtmpDv5Yly/temp_libpath902c10dbf1a1'
-#> (as 'lib' is unspecified)
+#> Skipping install of 'boxquickplot' from a github remote, the SHA1 (820a1a0b) has not changed since last install.
+#>   Use `force = TRUE` to force installation
 ```
 
 ## Example
